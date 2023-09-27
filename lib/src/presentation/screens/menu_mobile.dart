@@ -157,7 +157,8 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      // Logic for the map action
+                      //
+                      Navigator.of(context).pushNamed('/zone_map');
                     },
                     style: ElevatedButton.styleFrom(
                       primary: const Color(0xFF99BF9C),
