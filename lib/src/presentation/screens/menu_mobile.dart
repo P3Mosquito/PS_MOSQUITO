@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ps_mosquito/colors.dart';
 
 class MenuMobile extends StatefulWidget {
   @override
@@ -46,6 +47,7 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: MyColors.primaryColor,
         // No title is shown in the AppBar
         title: null,
       ),
