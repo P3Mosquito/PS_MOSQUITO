@@ -1,49 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  
+
+  Future<void> _signIn(BuildContext context) async {
+    try {
+      final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      // Verifica si el inicio de sesión fue exitoso
+      if (userCredential.user != null) {
+        // Obtiene el rol del usuario desde Firebase Custom Claims
+        final firebaseUser = userCredential.user!;
+        await firebaseUser.reload(); // Recarga la información del usuario
+        await firebaseUser.getIdTokenResult(true); // Obtiene el token actualizado
+        final role = firebaseUser.displayName;
+
+        // Lógica de redirección basada en el rol
+        if (role == 'Supervisor') {
+          Navigator.of(context).pushNamed('/menu_mobile');
+        } else if (role == 'Administrador') {
+          Navigator.of(context).pushNamed('/menu_web');
+        }
+      }
+    } catch (e) {
+      // Handle errores de inicio de sesión, por ejemplo, credenciales incorrectas.
+      print('Error de inicio de sesión: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Fondo de imagen
           Image.asset(
-            'assets/images/ciudad.jpg', // Ruta de la imagen
-            fit: BoxFit.cover, // Ajustar la imagen para cubrir todo el fondo
-            width: double
-                .infinity, // Ancho de la imagen igual al ancho de la pantalla
-            height: double
-                .infinity, // Alto de la imagen igual al alto de la pantalla
+            'assets/images/ciudad.jpg',
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
           ),
           Container(
-            color:
-                Colors.transparent, // Hacer que el contenedor sea transparente
+            color: Colors.transparent,
             child: Center(
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Contenedor para el logotipo (aumenta la altura)
                     Container(
-                      padding: const EdgeInsets.all(30.0), // Aumenta el padding
+                      padding: const EdgeInsets.all(30.0),
                       child: Image.asset(
                         'assets/images/logo_mosquito.png',
-                        height: 120.0, // Aumenta la altura del logotipo
+                        height: 120.0,
                       ),
                     ),
-                    // Contenedor blanco con título y otros elementos
                     Container(
                       padding: const EdgeInsets.all(20.0),
                       decoration: BoxDecoration(
-                        color: const Color(
-                            0xFFD7D9D7), // Cambiar el color del Container a #D7D9D7
+                        color: const Color(0xFFD7D9D7),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Column(
                         children: [
-                          // Título
                           const Text(
                             'Bienvenido a Mosquito',
                             style: TextStyle(
@@ -55,15 +84,19 @@ class LoginScreen extends StatelessWidget {
                           _buildTextField(
                             hintText: 'E-mail',
                             icon: Icons.person,
+                            controller: emailController,
                           ),
                           const SizedBox(height: 10.0),
                           _buildTextField(
                             hintText: 'Contraseña',
                             icon: Icons.lock,
                             isPassword: true,
+                            controller: passwordController,
                           ),
                           const SizedBox(height: 20.0),
                           _buildLoginButton(context),
+                          const SizedBox(height: 10.0),
+                          _buildCreateAccountButton(context),
                           const SizedBox(height: 10.0),
                           _buildForgotPasswordButton(),
                         ],
@@ -78,60 +111,78 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-Widget _buildTextField(
-    {String? hintText, IconData? icon, bool isPassword = false}) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-    child: TextField(
-      obscureText: isPassword,
-      decoration: InputDecoration(
-        hintText: hintText,
-        prefixIcon: Icon(icon),
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          borderSide: BorderSide.none,
+  Widget _buildTextField({
+    String? hintText,
+    IconData? icon,
+    bool isPassword = false,
+    TextEditingController? controller,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: TextField(
+        controller: controller,
+        obscureText: isPassword,
+        decoration: InputDecoration(
+          hintText: hintText,
+          prefixIcon: Icon(icon),
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30.0),
+            borderSide: BorderSide.none,
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget _buildLoginButton(context) {
-  return ElevatedButton(
-    onPressed: () {
-      // Crea una instancia de NewPage y navega a ella
-      //Navigator.of(context).pushNamed('/menu_mobile');
-      Navigator.of(context).pushNamed('/menu_mobile');
-    },
-    style: ElevatedButton.styleFrom(
-      primary: Color(0xFF4EA674),
-      padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 10.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30.0),
+  Widget _buildLoginButton(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        _signIn(context);
+      },
+      style: ElevatedButton.styleFrom(
+        primary: Color(0xFF4EA674),
+        padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 10.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
       ),
-    ),
-    child: const Text(
-      'Iniciar Sesión',
-      style: TextStyle(fontSize: 18.0, color: Colors.black),
-    ),
-  );
-}
+      child: const Text(
+        'Iniciar Sesión',
+        style: TextStyle(fontSize: 18.0, color: Colors.black),
+      ),
+    );
+  }
 
-Widget _buildForgotPasswordButton() {
-  return TextButton(
-    onPressed: () {
-      // Agrega tu lógica para manejar el olvido de contraseña aquí.
-    },
-    child: const Text(
-      'Olvidaste tu contraseña',
-      style: TextStyle(
-        fontSize: 16.0,
-        color: Colors.blue,
+  Widget _buildCreateAccountButton(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        Navigator.of(context).pushNamed('/register_web');
+      },
+      child: const Text(
+        'Crear Cuenta',
+        style: TextStyle(
+          fontSize: 16.0,
+          color: Colors.blue,
+        ),
       ),
-    ),
-  );
+    );
+  }
+
+  Widget _buildForgotPasswordButton() {
+    return TextButton(
+      onPressed: () {
+        // Agrega tu lógica para manejar el olvido de contraseña aquí.
+      },
+      child: const Text(
+        'Olvidaste tu contraseña',
+        style: TextStyle(
+          fontSize: 16.0,
+          color: Colors.blue,
+        ),
+      ),
+    );
+  }
 }
