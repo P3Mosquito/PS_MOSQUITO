@@ -10,7 +10,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  
 
   Future<void> _signIn(BuildContext context) async {
     try {
@@ -98,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           const SizedBox(height: 10.0),
                           _buildCreateAccountButton(context),
                           const SizedBox(height: 10.0),
-                          _buildForgotPasswordButton(),
+                          _buildForgotPasswordButton(context),
                         ],
                       ),
                     ),
@@ -171,13 +170,13 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildForgotPasswordButton() {
+  Widget _buildForgotPasswordButton(BuildContext context) {
     return TextButton(
       onPressed: () {
-        // Agrega tu lógica para manejar el olvido de contraseña aquí.
+        Navigator.of(context).pushNamed('/Restore_password');
       },
       child: const Text(
-        'Olvidaste tu contraseña',
+        '¿Olvidaste tu contraseña?',
         style: TextStyle(
           fontSize: 16.0,
           color: Colors.blue,

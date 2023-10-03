@@ -6,7 +6,7 @@ class MenuMobile extends StatefulWidget {
 }
 
 class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
-  bool showImage = false; // Variable to control the visibility of the image
+  bool showImage = false;
 
   late AnimationController _rotateController;
   late Animation<double> _rotateAnimation;
@@ -15,13 +15,11 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    // Configure the rotation animation
     _rotateController = AnimationController(
-      duration: const Duration(seconds: 2), // Duration of the animation
-      vsync: this, // Use 'this' as the vsync
+      duration: const Duration(seconds: 2),
+      vsync: this,
     );
 
-    // Start the animation after a brief delay
     Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
         showImage = true;
@@ -29,10 +27,9 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
       _rotateController.forward();
     });
 
-    // Define the rotation animation
     _rotateAnimation = Tween<double>(
-      begin: 0.0, // Initial angle
-      end: 2 * 3.141592653589793, // Final angle (a full rotation in radians)
+      begin: 0.0,
+      end: 2 * 3.141592653589793,
     ).animate(_rotateController);
   }
 
@@ -46,29 +43,43 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // No title is shown in the AppBar
-        title: null,
+        backgroundColor: Color(0xFF4EA674), // Cambio del color de fondo de la AppBar
+        title: Text(
+          'Menú',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.white, // Color del título de la AppBar
+          ),
+        ),
       ),
       body: Stack(
         children: [
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                    'assets/images/ciudad.jpg'), // Replace with your background image path
+                image: AssetImage('assets/images/ciudad.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
           Positioned(
-            top: 40, // Adjust the top margin here
-            left: 20, // Adjust the left margin here
-            right: 20, // Adjust the right margin here
+            top: 40,
+            left: 20,
+            right: 20,
             child: Container(
               width: double.infinity,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: Color(0xFFD7D9D7),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
               ),
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -79,27 +90,25 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
                       return Transform.rotate(
                         angle: _rotateAnimation.value,
                         child: Visibility(
-                          visible:
-                              showImage, // Control the visibility of the image
+                          visible: showImage,
                           child: Image.asset(
-                            'assets/images/logo_mosquito.png', // Replace with your image path
-                            width: 100, // Image width
-                            height: 100, // Image height
+                            'assets/images/logo_mosquito.png',
+                            width: 100,
+                            height: 100,
                           ),
                         ),
                       );
                     },
                   ),
                   const SizedBox(
-                      height: 10), // Space between the image and the text
+                      height: 20),
                   const Text(
-                    'Mosquito Captura y Analiza', // Changed to "Mosquito" instead of "Mosquitobot"
+                    'Mosquito Captura y Analiza',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 20, // Decreased font size
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      fontFamily:
-                          'Roboto', // Change the font as per your preference
+                      fontFamily: 'Roboto',
                     ),
                   ),
                 ],
@@ -107,16 +116,23 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
             ),
           ),
           Positioned(
-            top: 200, // Adjust the top margin for the button container
-            left: 20, // Adjust the left margin here
-            right: 20, // Adjust the right margin here
+            top: 200,
+            left: 20,
+            right: 20,
             child: Container(
               width: double.infinity,
-              margin:
-                  const EdgeInsets.all(40), // Increased margin for separation
-              decoration: const BoxDecoration(
+              margin: const EdgeInsets.all(40),
+              decoration: BoxDecoration(
                 color: Color(0xFFD7D9D7),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
               ),
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -124,50 +140,46 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
                 children: <Widget>[
                   ElevatedButton(
                     onPressed: () {
-                      // Logic for the tasks action
                       Navigator.of(context).pushNamed('/my_tasks');
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF99BF9C),
+                      primary: Color(0xFF4EA674), // Cambio del color del botón
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 60,
-                          vertical: 20), // Adjust the button width here
+                          horizontal: 60, vertical: 20),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Tareas',
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      // Logic for the logout action
+                      // Agregar lógica para cerrar sesión aquí
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF99BF9C),
+                      primary: Color(0xFF4EA674), // Cambio del color del botón
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 60,
-                          vertical: 20), // Adjust the button width here
+                          horizontal: 60, vertical: 20),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Cerrar Sesión',
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      // Logic for the map action
+                      // Agregar lógica para el mapa aquí
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF99BF9C),
+                      primary: Color(0xFF4EA674), // Cambio del color del botón
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 60,
-                          vertical: 20), // Adjust the button width here
+                          horizontal: 60, vertical: 20),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Mapa',
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],
