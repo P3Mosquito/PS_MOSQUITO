@@ -6,8 +6,11 @@ import 'package:ps_mosquito/src/presentation/screens/register_web.dart';
 import 'package:ps_mosquito/src/presentation/screens/Restore_password.dart';
 import 'package:ps_mosquito/src/presentation/screens/menu_web.dart';
 import 'package:ps_mosquito/src/presentation/screens/menu_mobile.dart';
-import 'package:ps_mosquito/src/presentation/screens/task_mobile.dart';
 import 'package:ps_mosquito/src/presentation/screens/zone_map.dart';
+import 'package:ps_mosquito/src/presentation/screens/map_mobile.dart';
+import 'package:ps_mosquito/src/presentation/screens/look_task.dart';
+
+
 import 'package:firebase_core/firebase_core.dart';
 
 
@@ -35,11 +38,6 @@ class Task {
 }
 
 class MyApp extends StatelessWidget {
-  final List<Task> tasks = [
-    Task('Tarea 1'),
-    Task('Tarea 2'),
-    Task('Tarea 3'),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -48,21 +46,35 @@ class MyApp extends StatelessWidget {
       title: 'Mosquito',
       // Define las rutas de la aplicación
       routes: {
-                  '/my_tasks': (context) =>
-            TaskListScreen(tasks), // Ruta para la lista de tareas
-                  '/login': (context) =>
-            LoginScreen(),
-                    '/menu_web': (context) =>
+
+            '/login': (context) =>
+          LoginScreen(),
+
+            '/map_mobile': (context) =>
+            MapMobile(),
+
+            '/menu_web': (context) =>
             AdminMenu(),
-                    '/register_web': (context) =>
+
+            '/register_web': (context) =>
             RegisterScreen(),
-                    '/Restore_password': (context) =>
+
+            '/Restore_password': (context) =>
             ResetPasswordScreen(),
-                    '/zone_map': (context) =>
+
+            '/zone_map': (context) =>
             const ZoneMapScreen(),
-                    '/add_task': (context) => const AddTaskScreen(),
-                    '/menu_mobile': (context) =>
+
+            '/add_task': (context) =>
+            AddTaskScreen(taskData: {},),
+
+            '/menu_mobile': (context) =>
             MenuMobile(),
+
+            '/look_task': (context) =>
+            LookTaskView(),
+
+
       },
       // Define la pantalla inicial
       initialRoute: '/login',

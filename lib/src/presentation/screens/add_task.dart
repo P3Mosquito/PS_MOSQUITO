@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:ps_mosquito/colors.dart';
+import 'map_mobile.dart'; // Importa la pantalla de mapa móvil
 
 class AddTaskScreen extends StatelessWidget {
-  const AddTaskScreen({super.key});
+  final Map<String, dynamic> taskData;
+
+  AddTaskScreen({required this.taskData});
 
   @override
   Widget build(BuildContext context) {
+    final taskName = taskData['Nombre'];
+    final zona = taskData['Zona'];
+    final ubicacion = taskData['Ubicacion'];
+    final supervisorId = taskData['SupervisorId'];
+
     return Scaffold(
       backgroundColor: MyColors.thirdColor,
       appBar: AppBar(
@@ -16,6 +24,49 @@ class AddTaskScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: MyColors.primaryColor,
+              ),
+              onPressed: () {
+                // Navegar a la pantalla de mapa móvil
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MapMobile()));
+              },
+
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.location_pin),
+                  SizedBox(width: 8),
+                  Text('Mapa: Realizar tareas'),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+              margin: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
+              child: ListTile(
+                title: Text('Nombre: $taskName'),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('Zona: $zona'),
+                    Text('Ubicación: $ubicacion'),
+                    Text('ID del supervisor: $supervisorId'),
+                  ],
+                ),
+              ),
+            ),
             TextFormField(
               decoration: const InputDecoration(labelText: 'Nombre'),
             ),
@@ -28,8 +79,8 @@ class AddTaskScreen extends StatelessWidget {
               decoration: const InputDecoration(labelText: 'Tarea'),
             ),
             const SizedBox(
-                height:
-                    20), // Espacio entre los campos de texto y el botón de carga de imágenes
+              height: 20,
+            ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 primary: MyColors.primaryColor,
@@ -41,7 +92,7 @@ class AddTaskScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.camera_alt),
-                  SizedBox(width: 8), // Espacio entre el icono y el texto
+                  SizedBox(width: 8),
                   Text('Subir Imagen'),
                 ],
               ),
@@ -58,7 +109,7 @@ class AddTaskScreen extends StatelessWidget {
           },
           backgroundColor: MyColors.primaryColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0), // Radio de las esquinas
+            borderRadius: BorderRadius.circular(8.0),
           ),
           child: const Text(
             'Guardar',
@@ -66,8 +117,7 @@ class AddTaskScreen extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation
-          .centerFloat, // Alinea el FAB en el centro inferior de la pantalla
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

@@ -32,6 +32,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         title: Text('Restablecer Contraseña'),
         centerTitle: true,
       ),
+      backgroundColor: Color.fromARGB(255, 112, 173, 139), // Color de fondo de la pantalla completa
       body: Center(
         child: SingleChildScrollView(
           child: Container(

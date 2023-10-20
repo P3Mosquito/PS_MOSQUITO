@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MenuMobile extends StatefulWidget {
   @override
@@ -39,32 +40,37 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  Future<void> _signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      // Redirige a la pantalla de inicio de sesión o a donde desees después del cierre de sesión.
+      Navigator.of(context).pushReplacementNamed('/login');
+    } catch (e) {
+      print("Error al cerrar sesión: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF4EA674), // Cambio del color de fondo de la AppBar
+        backgroundColor: Color(0xFF4EA674),
         title: Text(
           'Menú',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Colors.white, // Color del título de la AppBar
+            color: Colors.white,
           ),
         ),
       ),
       body: Stack(
         children: [
           Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/ciudad.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
+            color: Color.fromARGB(255, 112, 173, 139), // Fondo de color
           ),
           Positioned(
-            top: 40,
+            top: 60,
             left: 20,
             right: 20,
             child: Container(
@@ -101,7 +107,8 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
                     },
                   ),
                   const SizedBox(
-                      height: 20),
+                    height: 20,
+                  ),
                   const Text(
                     'Mosquito Captura y Analiza',
                     style: TextStyle(
@@ -116,7 +123,32 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
             ),
           ),
           Positioned(
-            top: 200,
+            top: 5,
+            left: 10,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              padding: EdgeInsets.all(8),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.person),
+                  SizedBox(width: 8),
+                  Text(
+                    FirebaseAuth.instance.currentUser?.email ?? 'Usuario',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: 300,
             left: 20,
             right: 20,
             child: Container(
@@ -140,12 +172,14 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
                 children: <Widget>[
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/my_tasks');
+                      Navigator.of(context).pushNamed('/look_task');
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF4EA674), // Cambio del color del botón
+                      primary: Color(0xFF4EA674),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 60, vertical: 20),
+                        horizontal: 60,
+                        vertical: 20,
+                      ),
                     ),
                     child: Text(
                       'Tareas',
@@ -155,30 +189,32 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      // Agregar lógica para cerrar sesión aquí
+                      Navigator.of(context).pushNamed('/map_mobile');
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF4EA674), // Cambio del color del botón
+                      primary: Color(0xFF4EA674),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 60, vertical: 20),
+                        horizontal: 60,
+                        vertical: 20,
+                      ),
                     ),
                     child: Text(
-                      'Cerrar Sesión',
+                      'Mapa',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      // Agregar lógica para el mapa aquí
-                    },
+                    onPressed: _signOut,
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF4EA674), // Cambio del color del botón
+                      primary: Color(0xFF4EA674),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 60, vertical: 20),
+                        horizontal: 60,
+                        vertical: 20,
+                      ),
                     ),
                     child: Text(
-                      'Mapa',
+                      'Cerrar Sesión',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

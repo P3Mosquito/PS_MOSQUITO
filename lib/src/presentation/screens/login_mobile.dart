@@ -10,103 +10,123 @@ class _LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  String? emailError;
+  String? passwordError;
+  String? loginError;
+  bool obscurePassword = true; // Controla la visibilidad de la contraseña
 
   Future<void> _signIn(BuildContext context) async {
-    try {
-      final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+    if (_formKey.currentState!.validate()) {
+      try {
+        final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
 
-      // Verifica si el inicio de sesión fue exitoso
-      if (userCredential.user != null) {
-        // Obtiene el rol del usuario desde Firebase Custom Claims
-        final firebaseUser = userCredential.user!;
-        await firebaseUser.reload(); // Recarga la información del usuario
-        await firebaseUser.getIdTokenResult(true); // Obtiene el token actualizado
-        final role = firebaseUser.displayName;
+        // Verifica si el inicio de sesión fue exitoso
+        if (userCredential.user != null) {
+          final firebaseUser = userCredential.user!;
 
-        // Lógica de redirección basada en el rol
-        if (role == 'Supervisor') {
-          Navigator.of(context).pushNamed('/menu_mobile');
-        } else if (role == 'Administrador') {
-          Navigator.of(context).pushNamed('/menu_web');
+          // Obtiene el rol del usuario desde Firebase Custom Claims
+          String? role = firebaseUser.displayName;
+
+          if (role == null) {
+            // Si el usuario no tiene un rol asignado, se le asigna "Supervisor" de forma predeterminada
+            role = "Supervisor";
+          }
+
+          await firebaseUser.reload(); // Recarga la información del usuario
+          await firebaseUser.getIdTokenResult(true); // Obtiene el token actualizado
+
+          // Lógica de redirección basada en el rol
+          if (role == 'Supervisor') {
+            Navigator.of(context).pushNamed('/menu_mobile');
+          } else if (role == 'Administrador') {
+            Navigator.of(context).pushNamed('/menu_web');
+          }
+        }
+      } catch (e) {
+        // Handle errores de inicio de sesión, por ejemplo, credenciales incorrectas.
+        print('Error de inicio de sesión: $e');
+        // Mostrar mensaje de error genérico o específico según el tipo de error.
+        if (e is FirebaseAuthException) {
+          if (e.code == 'user-not-found') {
+            setState(() {
+              emailError = 'Usuario no encontrado';
+            });
+          } else if (e.code == 'wrong-password') {
+            setState(() {
+              passwordError = 'Contraseña incorrecta';
+              loginError = 'Usuario o contraseña incorrecta'; // Mensaje de error adicional
+            });
+          } else {
+            // Otro tipo de error
+          }
         }
       }
-    } catch (e) {
-      // Handle errores de inicio de sesión, por ejemplo, credenciales incorrectas.
-      print('Error de inicio de sesión: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Image.asset(
-            'assets/images/ciudad.jpg',
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          ),
-          Container(
-            color: Colors.transparent,
-            child: Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(30.0),
-                      child: Image.asset(
-                        'assets/images/logo_mosquito.png',
-                        height: 120.0,
+      appBar: AppBar(
+        backgroundColor: Color(0xFF4EA674),
+        title: Text('Inicio de Sesión'), // Establece el título de la pantalla
+      ),
+      body: Form(
+        key: _formKey,
+        child: Stack(
+          children: [
+            Container(
+              color: Color.fromARGB(255, 112, 173, 139), // Fondo de color
+              width: double.infinity,
+              height: double.infinity,
+            ),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Agrega tu logotipo aquí
+                  Image.asset(
+                    'assets/images/logo_mosquito.png', // Ruta de tu logotipo
+                    width: 120.0,
+                  ),
+                  const SizedBox(height: 20.0), // Espacio entre el logotipo y otros elementos
+
+                  // Resto del código de inicio de sesión (campos de entrada, botones, etc.)
+                  _buildTextField(
+                    hintText: 'E-mail',
+                    icon: Icons.person,
+                    controller: emailController,
+                    errorText: emailError,
+                  ),
+                  const SizedBox(height: 10.0),
+                  _buildTextField(
+                    hintText: 'Contraseña',
+                    icon: Icons.lock,
+                    isPassword: obscurePassword, // Usa el estado de visibilidad de la contraseña
+                    controller: passwordController,
+                    errorText: passwordError,
+                  ),
+                  const SizedBox(height: 20.0),
+                  if (loginError != null)
+                    Text(
+                      loginError!,
+                      style: TextStyle(
+                        color: Colors.red,
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(20.0),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFD7D9D7),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Column(
-                        children: [
-                          const Text(
-                            'Bienvenido a Mosquito',
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 20.0),
-                          _buildTextField(
-                            hintText: 'E-mail',
-                            icon: Icons.person,
-                            controller: emailController,
-                          ),
-                          const SizedBox(height: 10.0),
-                          _buildTextField(
-                            hintText: 'Contraseña',
-                            icon: Icons.lock,
-                            isPassword: true,
-                            controller: passwordController,
-                          ),
-                          const SizedBox(height: 20.0),
-                          _buildLoginButton(context),
-                          const SizedBox(height: 10.0),
-                          _buildCreateAccountButton(context),
-                          const SizedBox(height: 10.0),
-                          _buildForgotPasswordButton(context),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  _buildLoginButton(context),
+                  const SizedBox(height: 10.0),
+                  _buildForgotPasswordButton(context),
+                ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -116,10 +136,11 @@ class _LoginScreenState extends State<LoginScreen> {
     IconData? icon,
     bool isPassword = false,
     TextEditingController? controller,
+    String? errorText,
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
         obscureText: isPassword,
         decoration: InputDecoration(
@@ -131,7 +152,26 @@ class _LoginScreenState extends State<LoginScreen> {
             borderRadius: BorderRadius.circular(30.0),
             borderSide: BorderSide.none,
           ),
+          errorText: errorText,
+          suffixIcon: isPassword
+              ? IconButton(
+                  icon: Icon(
+                    obscurePassword ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      obscurePassword = !obscurePassword;
+                    });
+                  },
+                )
+              : null,
         ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Este campo es obligatorio';
+          }
+          return null;
+        },
       ),
     );
   }
@@ -148,24 +188,9 @@ class _LoginScreenState extends State<LoginScreen> {
           borderRadius: BorderRadius.circular(30.0),
         ),
       ),
-      child: const Text(
+      child: Text(
         'Iniciar Sesión',
         style: TextStyle(fontSize: 18.0, color: Colors.black),
-      ),
-    );
-  }
-
-  Widget _buildCreateAccountButton(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        Navigator.of(context).pushNamed('/register_web');
-      },
-      child: const Text(
-        'Crear Cuenta',
-        style: TextStyle(
-          fontSize: 16.0,
-          color: Colors.blue,
-        ),
       ),
     );
   }
@@ -179,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
         '¿Olvidaste tu contraseña?',
         style: TextStyle(
           fontSize: 16.0,
-          color: Colors.blue,
+          color: Color.fromARGB(255, 255, 255, 255),
         ),
       ),
     );
