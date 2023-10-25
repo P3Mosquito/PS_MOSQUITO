@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -32,10 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // Obtiene el rol del usuario desde Firebase Custom Claims
           String? role = firebaseUser.displayName;
 
-          if (role == null) {
-            // Si el usuario no tiene un rol asignado, se le asigna "Supervisor" de forma predeterminada
-            role = "Supervisor";
-          }
+          role ??= "Supervisor";
 
           await firebaseUser.reload(); // Recarga la información del usuario
           await firebaseUser.getIdTokenResult(true); // Obtiene el token actualizado
@@ -49,7 +50,6 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } catch (e) {
         // Handle errores de inicio de sesión, por ejemplo, credenciales incorrectas.
-        print('Error de inicio de sesión: $e');
         // Mostrar mensaje de error genérico o específico según el tipo de error.
         if (e is FirebaseAuthException) {
           if (e.code == 'user-not-found') {
@@ -73,15 +73,15 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF4EA674),
-        title: Text('Inicio de Sesión'), // Establece el título de la pantalla
+        backgroundColor: const Color(0xFF4EA674),
+        title: const Text('Inicio de Sesión'), // Establece el título de la pantalla
       ),
       body: Form(
         key: _formKey,
         child: Stack(
           children: [
             Container(
-              color: Color.fromARGB(255, 112, 173, 139), // Fondo de color
+              color: const Color.fromARGB(255, 112, 173, 139), // Fondo de color
               width: double.infinity,
               height: double.infinity,
             ),
@@ -115,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   if (loginError != null)
                     Text(
                       loginError!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.red,
                       ),
                     ),
@@ -182,13 +182,13 @@ class _LoginScreenState extends State<LoginScreen> {
         _signIn(context);
       },
       style: ElevatedButton.styleFrom(
-        primary: Color(0xFF4EA674),
-        padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 10.0),
+        backgroundColor: const Color(0xFF4EA674),
+        padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
       ),
-      child: Text(
+      child: const Text(
         'Iniciar Sesión',
         style: TextStyle(fontSize: 18.0, color: Colors.black),
       ),

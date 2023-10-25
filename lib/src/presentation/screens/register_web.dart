@@ -1,8 +1,12 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, avoid_print, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -67,13 +71,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registro'),
+        title: const Text('Registro'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'Formulario de Registro',
               style: TextStyle(fontSize: 24.0),
             ),
@@ -106,7 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               onPressed: () {
                 _register(context);
               },
-              child: Text('Registrarse'),
+              child: const Text('Registrarse'),
             ),
           ],
         ),

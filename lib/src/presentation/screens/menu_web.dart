@@ -1,6 +1,10 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 class AdminMenu extends StatefulWidget {
+  const AdminMenu({super.key});
+
   @override
   _AdminMenuState createState() => _AdminMenuState();
 }
@@ -12,7 +16,7 @@ class _AdminMenuState extends State<AdminMenu> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(
+          const DrawerHeader(
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
@@ -25,33 +29,33 @@ class _AdminMenuState extends State<AdminMenu> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.dashboard),
-            title: Text('Panel de Control'),
+            leading: const Icon(Icons.dashboard),
+            title: const Text('Panel de Control'),
             onTap: () {
               // Agregar la lógica para navegar al panel de control
               Navigator.pop(context);
             },
           ),
           ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Gestión de Usuarios'),
+            leading: const Icon(Icons.person),
+            title: const Text('Gestión de Usuarios'),
             onTap: () {
               // Agregar la lógica para navegar a la gestión de usuarios
               Navigator.pop(context);
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Configuración'),
+            leading: const Icon(Icons.settings),
+            title: const Text('Configuración'),
             onTap: () {
               // Agregar la lógica para navegar a la configuración
               Navigator.pop(context);
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Cerrar Sesión'),
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text('Cerrar Sesión'),
             onTap: () {
               // Agregar la lógica para cerrar sesión
               Navigator.pop(context);

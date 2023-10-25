@@ -6,11 +6,8 @@ import 'package:ps_mosquito/src/presentation/screens/register_web.dart';
 import 'package:ps_mosquito/src/presentation/screens/Restore_password.dart';
 import 'package:ps_mosquito/src/presentation/screens/menu_web.dart';
 import 'package:ps_mosquito/src/presentation/screens/menu_mobile.dart';
-import 'package:ps_mosquito/src/presentation/screens/zone_map.dart';
 import 'package:ps_mosquito/src/presentation/screens/map_mobile.dart';
 import 'package:ps_mosquito/src/presentation/screens/look_task.dart';
-
-
 import 'package:firebase_core/firebase_core.dart';
 
 
@@ -18,7 +15,7 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
     await Firebase.initializeApp(
-      options: FirebaseOptions(
+      options: const FirebaseOptions(
         apiKey: "AIzaSyBd0_dWTNOTQOA4vxbao9kWX6yEUWPhmuk",
         appId: "1:172987635386:web:906f3bfbf3495d1a745483",
         messagingSenderId: "172987635386",
@@ -29,7 +26,7 @@ Future main() async {
   } else {
     await Firebase.initializeApp();
   }
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 class Task {
   String name;
@@ -38,6 +35,8 @@ class Task {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,32 +47,29 @@ class MyApp extends StatelessWidget {
       routes: {
 
             '/login': (context) =>
-          LoginScreen(),
+          const LoginScreen(),
 
             '/map_mobile': (context) =>
-            MapMobile(),
+            const MapMobile(),
 
             '/menu_web': (context) =>
-            AdminMenu(),
+            const AdminMenu(),
 
             '/register_web': (context) =>
-            RegisterScreen(),
+            const RegisterScreen(),
 
             '/Restore_password': (context) =>
-            ResetPasswordScreen(),
+            const ResetPasswordScreen(),
 
-            '/zone_map': (context) =>
-            const ZoneMapScreen(),
 
             '/add_task': (context) =>
-            AddTaskScreen(taskData: {},),
+            const AddTaskScreen(taskData: {},),
 
             '/menu_mobile': (context) =>
-            MenuMobile(),
+            const MenuMobile(),
 
             '/look_task': (context) =>
-            LookTaskView(),
-
+            const LookTaskView(taskDetails: {},),
 
       },
       // Define la pantalla inicial

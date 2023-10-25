@@ -1,7 +1,11 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class MenuMobile extends StatefulWidget {
+  const MenuMobile({super.key});
+
   @override
   _MenuMobileState createState() => _MenuMobileState();
 }
@@ -54,8 +58,8 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF4EA674),
-        title: Text(
+        backgroundColor: const Color(0xFF4EA674),
+        title: const Text(
           'Menú',
           style: TextStyle(
             fontSize: 24,
@@ -67,7 +71,7 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
       body: Stack(
         children: [
           Container(
-            color: Color.fromARGB(255, 112, 173, 139), // Fondo de color
+            color: const Color.fromARGB(255, 112, 173, 139), // Fondo de color
           ),
           Positioned(
             top: 60,
@@ -76,14 +80,14 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Color(0xFFD7D9D7),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: const Color(0xFFD7D9D7),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.2),
                     spreadRadius: 2,
                     blurRadius: 4,
-                    offset: Offset(0, 2),
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
@@ -130,15 +134,15 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
               ),
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.person),
-                  SizedBox(width: 8),
+                  const Icon(Icons.person),
+                  const SizedBox(width: 8),
                   Text(
                     FirebaseAuth.instance.currentUser?.email ?? 'Usuario',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -155,14 +159,14 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
               width: double.infinity,
               margin: const EdgeInsets.all(40),
               decoration: BoxDecoration(
-                color: Color(0xFFD7D9D7),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: const Color(0xFFD7D9D7),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.2),
                     spreadRadius: 2,
                     blurRadius: 4,
-                    offset: Offset(0, 2),
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
@@ -175,13 +179,13 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
                       Navigator.of(context).pushNamed('/look_task');
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF4EA674),
+                      backgroundColor: const Color(0xFF4EA674),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 60,
                         vertical: 20,
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Tareas',
                       style: TextStyle(color: Colors.white),
                     ),
@@ -192,13 +196,13 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
                       Navigator.of(context).pushNamed('/map_mobile');
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF4EA674),
+                      backgroundColor: const Color(0xFF4EA674),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 60,
                         vertical: 20,
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Mapa',
                       style: TextStyle(color: Colors.white),
                     ),
@@ -207,13 +211,13 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
                   ElevatedButton(
                     onPressed: _signOut,
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF4EA674),
+                      backgroundColor: const Color(0xFF4EA674),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 60,
                         vertical: 20,
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Cerrar Sesión',
                       style: TextStyle(color: Colors.white),
                     ),

@@ -5,14 +5,16 @@ import 'map_mobile.dart';
 import 'add_task.dart'; // Importa add_task.dart
 
 class LookTaskView extends StatelessWidget {
+  const LookTaskView({super.key, required Map<String, dynamic> taskDetails});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF4EA674),
+        backgroundColor: const Color(0xFF4EA674),
         title: const Text('Lista de Tareas'),
       ),
-      backgroundColor: Color.fromARGB(255, 112, 173, 139), // Fondo de color
+      backgroundColor: const Color.fromARGB(255, 112, 173, 139), // Fondo de color
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -56,11 +58,11 @@ class LookTaskView extends StatelessWidget {
                                           );
                                         },
                                         child: Container(
-                                          margin: EdgeInsets.all(10),
+                                          margin: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius: BorderRadius.circular(10),
-                                            boxShadow: [
+                                            boxShadow: const [
                                               BoxShadow(
                                                 color: Colors.grey,
                                                 blurRadius: 5,
@@ -90,15 +92,15 @@ class LookTaskView extends StatelessWidget {
                                                   },
                                                 ),
                                                 IconButton(
-                                                  icon: Icon(Icons.delete, color: Colors.red),
+                                                  icon: const Icon(Icons.delete, color: Colors.red),
                                                   onPressed: () {
                                                     _showDeleteConfirmationDialog(context, taskId);
                                                   },
                                                 ),
                                                 IconButton(
-                                                  icon: Icon(Icons.map, color: Color.fromARGB(255, 0, 0, 0)),
+                                                  icon: const Icon(Icons.map, color: Color.fromARGB(255, 0, 0, 0)),
                                                   onPressed: () {
-                                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MapMobile()));
+                                                    Navigator.push(context, MaterialPageRoute(builder: (context) => const MapMobile()));
                                                   },
                                                 ),
                                               ],
@@ -111,18 +113,18 @@ class LookTaskView extends StatelessWidget {
                                 ),
                               );
                             } else {
-                              return Text('No se encontraron tareas.');
+                              return const Text('No se encontraron tareas.');
                             }
                           }
                         }
-                        return CircularProgressIndicator();
+                        return const CircularProgressIndicator();
                       },
                     );
                   } else {
-                    return Text('Usuario no autenticado.');
+                    return const Text('Usuario no autenticado.');
                   }
                 }
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               },
             ),
           ],
@@ -136,17 +138,17 @@ class LookTaskView extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmar eliminación'),
-          content: Text('¿Estás seguro de que quieres eliminar esta tarea?'),
+          title: const Text('Confirmar eliminación'),
+          content: const Text('¿Estás seguro de que quieres eliminar esta tarea?'),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancelar'),
+              child: const Text('Cancelar'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Eliminar'),
+              child: const Text('Eliminar'),
               onPressed: () {
                 FirebaseFirestore.instance.collection('task').doc(taskId).delete();
                 Navigator.of(context).pop();
