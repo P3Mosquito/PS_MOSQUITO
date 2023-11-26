@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:ps_mosquito/src/presentation/screens/splash.dart';
 import 'package:ps_mosquito/src/presentation/screens/add_task.dart';
 import 'package:ps_mosquito/src/presentation/screens/login_mobile.dart';
-import 'package:ps_mosquito/src/presentation/screens/register_web.dart';
 import 'package:ps_mosquito/src/presentation/screens/Restore_password.dart';
-import 'package:ps_mosquito/src/presentation/screens/menu_web.dart';
 import 'package:ps_mosquito/src/presentation/screens/menu_mobile.dart';
-import 'package:ps_mosquito/src/presentation/screens/map_mobile.dart';
+import 'package:ps_mosquito/src/presentation/screens/User_data.dart';
 import 'package:ps_mosquito/src/presentation/screens/look_task.dart';
+import 'package:ps_mosquito/src/presentation/screens/storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 
@@ -43,37 +43,26 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Mosquito',
-      // Define las rutas de la aplicación
       routes: {
-
-            '/login': (context) =>
-          const LoginScreen(),
-
-            '/map_mobile': (context) =>
-            const MapMobile(),
-
-            '/menu_web': (context) =>
-            const AdminMenu(),
-
-            '/register_web': (context) =>
-            const RegisterScreen(),
-
-            '/Restore_password': (context) =>
-            const ResetPasswordScreen(),
-
-
-            '/add_task': (context) =>
-            const AddTaskScreen(taskData: {},),
-
-            '/menu_mobile': (context) =>
-            const MenuMobile(),
-
-            '/look_task': (context) =>
-            const LookTaskView(taskDetails: {},),
-
+        '/splash': (context) => const SplashScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/User_data': (context) => const UserData(),
+        '/storage': (context) => Storage(),
+        '/Restore_password': (context) => const ResetPasswordScreen(),
+        '/add_task': (context) => const AddTaskScreen(
+              taskData: {},
+              taskId: '',
+              taskDetails: {},
+            ),
+        '/menu_mobile': (context) => const MenuMobile(),
+        '/look_task': (context) => const LookTaskView(
+              taskDetails: {},
+              taskData: {},
+              taskId: '',
+              tareaDetails: '',
+            ),
       },
-      // Define la pantalla inicial
-      initialRoute: '/login',
+      initialRoute: '/splash',
     );
   }
 }

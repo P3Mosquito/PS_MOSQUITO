@@ -1,10 +1,12 @@
-// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, avoid_print
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, avoid_print, use_super_parameters, deprecated_member_use, prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:location/location.dart';
 
 class MenuMobile extends StatefulWidget {
-  const MenuMobile({super.key});
+  const MenuMobile({Key? key}) : super(key: key);
 
   @override
   _MenuMobileState createState() => _MenuMobileState();
@@ -15,6 +17,8 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
 
   late AnimationController _rotateController;
   late Animation<double> _rotateAnimation;
+
+  final Location location = Location();
 
   @override
   void initState() {
@@ -36,6 +40,8 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
       begin: 0.0,
       end: 2 * 3.141592653589793,
     ).animate(_rotateController);
+
+    _checkAndRequestLocationPermission();
   }
 
   @override
@@ -44,14 +50,32 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  Future<void> _signOut() async {
-    try {
-      await FirebaseAuth.instance.signOut();
-      // Redirige a la pantalla de inicio de sesión o a donde desees después del cierre de sesión.
-      Navigator.of(context).pushReplacementNamed('/login');
-    } catch (e) {
-      print("Error al cerrar sesión: $e");
+  Future<void> _checkAndRequestLocationPermission() async {
+    bool serviceEnabled;
+    PermissionStatus permissionStatus;
+
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
     }
+
+    permissionStatus = await location.hasPermission();
+    if (permissionStatus == PermissionStatus.denied) {
+      permissionStatus = await location.requestPermission();
+      if (permissionStatus != PermissionStatus.granted) {
+        return;
+      }
+    }
+  }
+
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLoggedIn', false);
+    Navigator.of(context).pushReplacementNamed('/login');
   }
 
   @override
@@ -71,7 +95,7 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
       body: Stack(
         children: [
           Container(
-            color: const Color.fromARGB(255, 112, 173, 139), // Fondo de color
+            color: const Color.fromARGB(255, 112, 173, 139),
           ),
           Positioned(
             top: 60,
@@ -153,11 +177,11 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
           ),
           Positioned(
             top: 300,
-            left: 20,
-            right: 20,
+            left: 30,
+            right: 30,
             child: Container(
               width: double.infinity,
-              margin: const EdgeInsets.all(40),
+              margin: const EdgeInsets.all(30),
               decoration: BoxDecoration(
                 color: const Color(0xFFD7D9D7),
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -170,7 +194,7 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -179,47 +203,100 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
                       Navigator.of(context).pushNamed('/look_task');
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4EA674),
+                      primary: const Color(0xFF4EA674),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 60,
                         vertical: 20,
                       ),
                     ),
-                    child: const Text(
-                      'Tareas',
-                      style: TextStyle(color: Colors.white),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.task,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Tareas',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/map_mobile');
+                      Navigator.of(context).pushNamed('/storage');
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4EA674),
+                      primary: const Color(0xFF4EA674),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 60,
                         vertical: 20,
                       ),
                     ),
-                    child: const Text(
-                      'Mapa',
-                      style: TextStyle(color: Colors.white),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.cloud_off,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Tarea sin conexión',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/User_data');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: const Color(0xFF4EA674),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 60,
+                        vertical: 20,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.person,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Perfil del Usuario',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: _signOut,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4EA674),
+                      primary: const Color(0xFF4EA674),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 60,
                         vertical: 20,
                       ),
                     ),
-                    child: const Text(
-                      'Cerrar Sesión',
-                      style: TextStyle(color: Colors.white),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.logout,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Cerrar Sesión',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
                 ],
