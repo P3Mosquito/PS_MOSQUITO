@@ -1,8 +1,11 @@
-plugins {
-    id "com.android.application"
-    id "kotlin-android"
-    id "dev.flutter.flutter-gradle-plugin"
+plugins
+{
+id "com.android.application"
+id "kotlin-android"
+id "dev.flutter.flutter-gradle-plugin"
+id 'com.google.gms.google-services'
 }
+
 
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
@@ -21,6 +24,8 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
+
+
 
 android {
     namespace "com.example.ps_mosquito"
@@ -45,10 +50,11 @@ android {
         applicationId "com.example.ps_mosquito"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 26
+        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -64,4 +70,14 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+<<<<<<< HEAD
+    implementation 'com.google.firebase:firebase-bom:32.3.1'
+    implementation 'com.google.firebase:firebase-analytics'
+}
+=======
+        apply plugin 'com.googlr.gms.google-services'
+    classpath 'com.google.gms.google-services:4.3.15'
+    classpath 'com.android.tools.build:gradle:7.0.0'
+}
+>>>>>>> bb874f6a927418780788f2669086fca37d182932
