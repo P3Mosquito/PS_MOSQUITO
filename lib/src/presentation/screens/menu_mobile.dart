@@ -231,9 +231,25 @@ class _MenuMobileState extends State<MenuMobile> with TickerProviderStateMixin {
                     style: ElevatedButton.styleFrom(
                       primary: const Color(0xFF4EA674),
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 60,
-                        vertical: 20,
-                      ),
+                          horizontal: 60,
+                          vertical: 20), // Adjust the button width here
+                    ),
+                    child: const Text(
+                      'Cerrar Sesión',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      //
+                      Navigator.of(context).pushNamed('/zone_map');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: const Color(0xFF99BF9C),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 60,
+                          vertical: 20), // Adjust the button width here
                     ),
                     child: Row(
                       children: [
