@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "172987635386",
+    "project_id": "mosquitobd-202b0",
+    "storage_bucket": "mosquitobd-202b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:172987635386:android:aa127101e1d2923b745483",
+        "android_client_info": {
+          "package_name": "com.example.ps_mosquito"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy3e2FZw7DCNYevJQu7QGRQCNwsd2sz-w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
